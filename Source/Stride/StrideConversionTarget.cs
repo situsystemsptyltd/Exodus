@@ -1,8 +1,11 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,39 +13,19 @@ namespace Exodus.Stride
 {
     public class StrideConversionTarget : IConversionTarget
     {
-        public StrideConversionTarget()
-        {
-
-        }
-
         public async Task<string> TransformCodeAsync(Document document)
         {
-            /*
+            if (document == null)
+            {
+                throw new ArgumentNullException(nameof(document));
+            }
 
-            TODO - Employ a more sophisticated replacement system using the document editor
+            var codeConverter = new StrideCodeConverter(document);
 
-            var syntaxRoot = await document.GetSyntaxRootAsync();
-            var semanticModel = await document.GetSemanticModelAsync();
-            var documentEditor = await DocumentEditor.CreateAsync(document);
+            var translatedCode = await codeConverter.TransformCodeAsync();
 
-
-            //Insert LogConditionWasTrue() before the Console.WriteLine()
-            //documentEditor.InsertBefore(ifStatement.Statement.ChildNodes().Single(), conditionWasTrueInvocation);
-            //Insert LogConditionWasFalse() after the Console.WriteLine()
-            //documentEditor.InsertAfter(ifStatement.Else.Statement.ChildNodes().Single(), conditionWasFalseInvocation);
-
-            var newDocument = documentEditor.GetChangedDocument();
-
-            var sourceText = await newDocument.GetTextAsync();
-
-            */
-
-            // For now, replace using the Syntax tree
-
-            var sourceText = await document.GetTextAsync();
-            var source = sourceText.ToString();
-
-            return SourceFileConverter.TransformCode(source);
+            return translatedCode;
         }
+
     }
 }
