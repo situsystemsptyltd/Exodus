@@ -6,7 +6,7 @@ to automate some parts of their transition.
 Exodus aims to be a focal point for all aspects of this transition. Initally we are
 focusing on source code translation. However next steps include asset and scene management.
 
-** Source Code transformation **
+**Source Code transformation**
 
 Exodus uses Roslyn to read the unity solution and applies transformations
 to the source code to help ease the transition to the new game engine.
