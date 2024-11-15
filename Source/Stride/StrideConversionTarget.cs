@@ -17,6 +17,10 @@ namespace Exodus.Stride
 
         public async Task<string> TransformCodeAsync(Document document)
         {
+            /*
+
+            TODO - Employ a more sophisticated replacement system using the document editor
+
             var syntaxRoot = await document.GetSyntaxRootAsync();
             var semanticModel = await document.GetSemanticModelAsync();
             var documentEditor = await DocumentEditor.CreateAsync(document);
@@ -31,7 +35,14 @@ namespace Exodus.Stride
 
             var sourceText = await newDocument.GetTextAsync();
 
-            return sourceText.ToString();
+            */
+
+            // For now, replace using the Syntax tree
+
+            var sourceText = await document.GetTextAsync();
+            var source = sourceText.ToString();
+
+            return SourceFileConverter.TransformCode(source);
         }
     }
 }
