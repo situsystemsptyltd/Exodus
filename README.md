@@ -35,8 +35,8 @@ The software
 
 Currently there are two conversion types
 
-StrideConversionTarget
-ChatGPTConversionTarget
+* StrideConversionTarget
+* ChatGPTConversionTarget
 
 The ChatGPTConversionTarget takes the name of the game engine you'd like to convert to as a parameter.
 
