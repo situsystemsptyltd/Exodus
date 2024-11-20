@@ -50,7 +50,7 @@ namespace Exodus
                 await ProcessFileAsync(document, outputBaseDirectory, conversionTarget); 
             }
 
-            analyzer.Results.Print();
+            analyzer.Results.SaveResultsToFolder(outputBaseDirectory);
         }
 
         // Process each C# file (read, transform, and write back to output directory)
