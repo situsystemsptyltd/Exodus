@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.MSBuild;
 using Exodus.Stride;
+using Exodus.Analysis;
 
 namespace Exodus
 {
@@ -40,15 +41,16 @@ namespace Exodus
             // Get a list of all CS files in those unity projects
             var unityDocuments = unityProjects.SelectMany(p => p.Documents.Where(d => d.Name.ToLowerInvariant().EndsWith(".cs"))).ToList();
 
-            // Flatten all the C# files from Unity projects into a single list
-            var fileTasks = unityDocuments.Select(d =>
+            var analyzer = new UnityAnalyzer();
+
+            // we process each document one at a time because for a complicated conversion it may rely on semantics present in other documents
+            foreach (var document in unityDocuments)
             {
-                return ProcessFileAsync(d, outputBaseDirectory, conversionTarget); // Process each file asynchronously
+                await analyzer.AnalyzeDocumentAsync(document);
+                await ProcessFileAsync(document, outputBaseDirectory, conversionTarget); 
+            }
 
-            }).ToList();
-
-            // Wait for all file processing tasks to complete in parallel
-            await Task.WhenAll(fileTasks);
+            analyzer.Results.Print();
         }
 
         // Process each C# file (read, transform, and write back to output directory)
