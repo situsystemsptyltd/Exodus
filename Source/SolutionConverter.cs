@@ -56,6 +56,12 @@ namespace Exodus
         // Process each C# file (read, transform, and write back to output directory)
         private static async Task ProcessFileAsync(Document document, string outputBaseDirectory, IConversionTarget conversionTarget)
         {
+            if (document.FilePath == null || document.Project.FilePath == null)
+            {
+                Console.WriteLine($"Warning: document.FilePath is null '{document.Name}'. Skipping processing");
+                return;
+            }
+
             // Calculate output file path for each C# file
             string outputFilePath = GetOutputFilePath(document.FilePath, document.Project.FilePath, outputBaseDirectory);
 
@@ -66,8 +72,8 @@ namespace Exodus
             string transformedContent = await conversionTarget.TransformCodeAsync(document);
 
             // Ensure the output directory exists
-            string outputDirectory = Path.GetDirectoryName(outputFilePath);
-            if (!Directory.Exists(outputDirectory))
+            string? outputDirectory = Path.GetDirectoryName(outputFilePath);
+            if (outputDirectory != null)
             {
                 Directory.CreateDirectory(outputDirectory);
             }
